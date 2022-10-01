@@ -11,7 +11,7 @@ function load_post(element, post) {
                             <div class="entry-meta">
                                 <span class="posted-on"><time class="entry-date published" date="2022-10-01">`+ post.time + `</time></span>
                             </div>
-                            <h1 class="entry-title"><a href="/src/post.html?postId=`+ post.id + `" rel="bookmark">` + post.title + `</a></h1>
+                            <h1 class="entry-title"><a href="/post.html?postId=`+ post.id + `" rel="bookmark">` + post.title + `</a></h1>
                         </header>
                         <div class="entry-content">
                             `+ post.content + `
@@ -30,7 +30,7 @@ async function load_page_post() {
 
 
 async function get_all_posts() {
-    var data = await fetch('/src/assets/data/posts.json');
+    var data = await fetch('/assets/data/posts.json');
     var json = await data.json();
     return json;
 }

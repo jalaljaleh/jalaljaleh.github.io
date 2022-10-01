@@ -1,5 +1,5 @@
 ﻿function load_footer() {
-    fetch('/src/assets/elements/footer.html')
+    fetch('/assets/elements/footer.html')
         .then(function (response) {
             return response.text();
         }).then(function (txt) {
@@ -9,16 +9,16 @@
 }
 
 function load_header(background, image, title, tagline, mode) {
-    fetch('/src/assets/elements/header.html')
+    fetch('/assets/elements/header.html')
         .then(function (response) {
             return response.text();
         }).then(function (txt) {
 
             if (background == null) {
-                background = "assets/images/background.jpg";
+                background = "/assets/images/background.jpg";
             }
             if (image == null) {
-                image = "assets/images/person-green.jpg";
+                image = "/assets/images/person-green.jpg";
             }
             if (title == null) {
                 title = "Jalal Jaleh"
