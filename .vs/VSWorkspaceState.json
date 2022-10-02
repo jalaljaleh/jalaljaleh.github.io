@@ -1,13 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\src",
-    "\\src\\Web",
-    "\\src\\Web\\blog",
-    "\\src\\Web\\blog\\css",
-    "\\src\\Web\\blog\\js",
-    "\\src\\Web\\blog\\posts"
+    ""
   ],
-  "SelectedNode": "\\src\\Web\\blog\\js",
   "PreviewInSolutionExplorer": false
 }

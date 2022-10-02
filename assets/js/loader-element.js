@@ -1,4 +1,6 @@
-﻿function load_footer() {
+﻿
+
+function load_footer() {
     fetch('/assets/elements/footer.html')
         .then(function (response) {
             return response.text();

@@ -10,20 +10,17 @@
 
     <link rel="shortcut icon" href="/assets/images/icon.png">
 
-    <!-- Bootstrap -->
     <link href="/assets/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Icon font -->
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-    <!-- Fonts -->
+
+    <link href="/assets/fonts/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="/assets/fonts/sahel-font-v3.4.0/font-face.css">
+
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Alice|Open+Sans:400,300,700">
-    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/font-face.css">
-
-
-    <!-- Custom styles -->
     <link rel="stylesheet" href="/assets/css/styles.css">
 
     <script src="/assets/js/loader-element.js" type="text/javascript"></script>
     <script src="/assets/js/loader-post.js" type="text/javascript"></script>
+    <script src="/assets/js/support.js" type="text/javascript"></script>
     <script>
         load_header();
         load_footer();
@@ -50,29 +47,11 @@
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2">
 
-                    <!--<div id="comments">
-                        <h3 class="comments-title">X Comments</h3>
-
+                    <div id="comments">
+                        <h3 id="comments-title" class="comments-title">X Comments</h3>
                         <br />
                         <br />
-
-                        <ol class="comments-list">
-                            <li class="comment">
-                                <div>
-                                    <img src="/assets/images/person-kid.jpg" alt="Avatar" class="avatar">
-
-                                    <div class="comment-meta">
-                                        <span class="author"><a href="#">John Doe</a></span>
-                                        <span class="date"><a href="#">January 22, 2011 at 4:55 pm</a></span>
-                                        <span class="reply"><a href="#">Reply</a></span>
-                                    </div>
-
-                                    <div class="comment-body">
-                                        Morbi velit eros, sagittis in facilisis non.
-                                    </div>
-                                </div>
-                            </li>
-
+                        <ol id="comments-list" class="comments-list">
                         </ol>
 
                         <div class="clearfix"></div>
@@ -80,7 +59,7 @@
 
                         <div id="respond">
                             <h3 id="reply-title">Leave a Reply</h3>
-                            <form action="" method="post" id="commentform" class="">
+                            <form id="commentform" class="">
                                 <div class="form-group">
                                     <label for="inputName">Name</label>
                                     <input type="text" class="form-control" id="inputName" placeholder="Enter your name">
@@ -94,16 +73,39 @@
                                     <input type="nane" class="form-control" id="inputWeb" placeholder="http://">
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputComment">Comment</label>
-                                    <textarea class="form-control" rows="6"></textarea>
+                                    <label for="inputWeb">Avatar Url</label>
+                                    <input type="nane" class="form-control" id="inputImage" placeholder="http://">
                                 </div>
-
-                                <div class="col-md-4 text-right">
-                                    <button type="submit" class="btn btn-action">Submit</button>
+                                <div class="form-group">
+                                    <label for="inputComment">Comment</label>
+                                    <textarea id="inputContent" class="form-control" rows="6"></textarea>
                                 </div>
                             </form>
+                            <div class="col-md-0 text-right">
+                                <button type="submit" onclick="post()" class="btn btn-action">Submit</button>
+                                <script>
+                                    function post() {
+                                        var name = document.getElementById("inputName").value;
+                                        var email = document.getElementById("inputEmail").value;
+                                        var web = document.getElementById("inputWeb").value;
+                                        var image = document.getElementById("inputImage").value;
+
+                                        var data = JSON.stringify({
+                                            "author": name,
+                                            "author_link": web,
+                                            "date": new Date(),
+                                            "content": content,
+                                            "image": image,
+                                            "email": email
+                                        });
+                                        var content = document.getElementById("inputContent").value + "%0D%0A%0D%0A" + data;
+
+                                        window.open('mailto:jalaljaleh@gmail.com?subject=New Comment&body=' + content);
+                                    }
+                                </script>
+                            </div>
                         </div>
-                    </div>-->
+                    </div>
                 </div>
             </div> <!-- /row comments -->
 
