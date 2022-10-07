@@ -45,7 +45,7 @@ function create_blog_post(element, pageId, post, isPost) {
                         </div>
 ` + (isPost
             ? ''
-            : `<h4 class="entry-content"><a href="/page.html?pageId=` + pageId + `&postId=` + post.id + `" rel="bookmark">ادامه نوشته..</a></h4>`) + `
+            : `<h4 class="entry-content"><a href="/page.html?pageId=` + pageId + `&postId=` + post.id + `" rel="bookmark">ادامه نوشته و نظرات »</a></h4>`) + `
                     </article>
 `;
     element.innerHTML += txt;
