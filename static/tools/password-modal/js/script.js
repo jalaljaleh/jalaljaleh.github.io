@@ -1,4 +1,4 @@
-﻿function closeModal(modal, pass,funaction) {
+﻿function closeModal(modal, pass, funaction) {
     modal.style.display = "none";
     var password = document.getElementById("labelPassword").value;
     if (password == pass) {
@@ -13,6 +13,11 @@ function createModal() {
         `
     <div id="myModal" class="modal">
         <div class="modal-content">
+          <img src="https://jalaljaleh.github.io/static/tools/password-modal/lock.png" alt="Lock" 
+style="
+    height: 200px;
+    width: 200px;
+">
             <p>جهت ورود به وبلاگ رمز عبور را وارد کنید.</p>
             <input class="modal-button" id="labelPassword" placeholder="رمز عبور">
                 <button class="modal-button" id="btnSubmitPassword">ثبت</button>

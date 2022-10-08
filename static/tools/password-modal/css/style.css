@@ -15,6 +15,7 @@
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    text-align-last: center;
 }
 
 /* Modal Content */
@@ -31,4 +32,5 @@
 .modal-button {
     padding: 10px;
     padding-inline: 20px;
+    margin: 10px;
 }
