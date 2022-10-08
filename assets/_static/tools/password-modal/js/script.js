@@ -6,7 +6,6 @@
     }
 }
 
-
 function createModal() {
     var body = document.getElementsByTagName("body")[0];
 
@@ -43,7 +42,6 @@ function showModal(pass, funaction) {
     };
 
 };
-
 
 function initialize(pass, funaction) {
 
