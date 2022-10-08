@@ -48,7 +48,7 @@ function initialize(pass, funaction) {
     var fileref = document.createElement("link");
     fileref.rel = "stylesheet";
     fileref.type = "text/css";
-    fileref.href = "/static/tools/password-modal/css/style.css";
+    fileref.href = "https://jalaljaleh.github.io/static/tools/password-modal/css/style.css";
     document.getElementsByTagName("head")[0].appendChild(fileref);
 
     showModal(pass, funaction);
