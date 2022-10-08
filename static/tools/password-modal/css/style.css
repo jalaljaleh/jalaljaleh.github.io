@@ -20,11 +20,11 @@
 
 /* Modal Content */
 .modal-content {
-    background-color: #fefefe;
+    background-color: black;
     margin: auto;
-    padding: 20px;
+    padding: 30px;
     border: 1px solid #888;
-    width: 80%;
+    width: 330px;
     font-family: system-ui;
     direction: rtl;
 }
