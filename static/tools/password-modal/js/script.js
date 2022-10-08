@@ -13,7 +13,7 @@ function createModal() {
         `
     <div id="myModal" class="modal">
         <div class="modal-content">
-          <img src="https://jalaljaleh.github.io/static/tools/password-modal/lock.png" alt="Lock" 
+          <img src="https://jalaljaleh.github.io/static/tools/password-modal/media/lock.png" alt="Lock" 
 style="
     height: 200px;
     width: 200px;
