@@ -19,12 +19,13 @@ async function fetchJSON(url) {
 
 async function fetchProfile(username) {
     const data = await fetchJSON(`https://api.github.com/users/${username}`);
+
     avatar.src = data.avatar_url;
-    fullName.textContent = data.name || data.login;
+    fullName.textContent = (data.name || data.login) + ' | محمد جلال ژاله';
     userHandle.textContent = '@' + data.login;
     company.textContent = data.company || '';
     locationEl.textContent = data.location || '';
-    if (data.blog) { blog.href = data.blog.startsWith('http') ? data.blog : 'https://' + data.blog; }
+  
     reposCount.textContent = data.public_repos;
     //followers.textContent = data.followers;
     //following.textContent = data.following;
