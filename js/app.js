@@ -21,7 +21,7 @@ async function fetchProfile(username) {
     const data = await fetchJSON(`https://api.github.com/users/${username}`);
 
     avatar.src = data.avatar_url;
-    fullName.textContent = (data.name || data.login) + ' | محمد جلال ژاله';
+    fullName.textContent = (data.name || data.login) ;
     userHandle.textContent = '@' + data.login;
     company.textContent = data.company || '';
     locationEl.textContent = data.location || '';
