@@ -1,19 +1,18 @@
 // src/controllers/notify/handler.js
-// Expects bindings:
+// Notify controller for /notify route (Cloudflare Worker + itty-router)
+// Bindings expected:
 //   - env.TELEGRAM_BOT_TOKEN (secret)
 //   - env.OWNER_CHAT_ID (secret)
 //   - env.NOTIFY_SHARED_TOKEN (optional secret for caller auth)
-//   - env.VISIT_KV (KV binding)  <-- optional but recommended
+//   - env.VISIT_KV (KV binding) optional but recommended
 //
-// Behavior:
-//   - POST /notify  with optional JSON { u: "<visitor-id>" }
-//   - Optional shared token header: X-NOTIFY-TOKEN
-//   - Uses KV to deduplicate visitors for a TTL
-//   - Sends Telegram message via bot, and returns JSON (CORS headers added by router if needed)
+// POST /notify  { u: "<visitor-id>" }  (caller-provided id optional)
+// GET  /notify  (same-origin quick test)
+// OPTIONS handled for CORS preflight
 
 const TELEGRAM_API_BASE = 'https://api.telegram.org';
 const VISIT_TTL_SEC = 60 * 60 * 24; // 24h
-const CORS_ALLOW_ORIGIN = '*'; // change to specific origin in production
+const CORS_ALLOW_ORIGIN = '*'; // change to specific origin for production
 const CORS_ALLOW_HEADERS = 'Content-Type, X-NOTIFY-TOKEN';
 
 function jsonResponse(body, status = 200) {
@@ -28,14 +27,9 @@ function jsonResponse(body, status = 200) {
 }
 
 function mdEscape(s = '') {
-    return String(s).replace(/([_*
-
-        \[\]
-
-            ()~`>#+\-=|{}.!\\]
-
-)/g, '\\$1');
+    return String(s).replace(/([_*[\]()~`>#+\-=|{}.!\\])/g, '\\$1');
 }
+
 
 function getBotToken(env) {
   return (env && env.TELEGRAM_BOT_TOKEN) || (typeof TELEGRAM_BOT_TOKEN !== 'undefined' && TELEGRAM_BOT_TOKEN) || '';
@@ -53,7 +47,7 @@ function getKV(env) {
 async function tgSendMessage(env, chat_id, text) {
   const token = getBotToken(env);
   if (!token) throw new Error('Bot token not configured');
-  const url = `${ TELEGRAM_API_BASE } / bot${ token } / sendMessage`;
+  const url = `${ TELEGRAM_API_BASE } /bot${token}/sendMessage`;
   const body = { chat_id, text, parse_mode: 'MarkdownV2', disable_web_page_preview: true };
   const res = await fetch(url, {
     method: 'POST',
@@ -62,7 +56,7 @@ async function tgSendMessage(env, chat_id, text) {
   });
   const j = await res.json().catch(() => null);
   if (!j || j.ok === false) {
-    throw new Error((j && j.description) ? j.description : `tg error ${ res.status }`);
+    throw new Error((j && j.description) ? j.description : `tg error ${ res.status } `);
   }
   return j.result;
 }
@@ -77,12 +71,11 @@ async function computeVisitorKey(request) {
   // prefer caller-provided id in JSON body
   try {
     const body = await request.json().catch(() => null);
-    if (body && body.u) return `u: ${ String(body.u).slice(0, 256)
-} `;
+    if (body && body.u) return `u:${ String(body.u).slice(0, 256) } `;
   } catch {}
   // fallback: ip + ua
   const ip = getClientIp(request);
-  const ua = (request.headers.get('user-agent') || '').slice(0,200);
+  const ua = (request.headers.get('user-agent') || '').slice(0, 200);
   return `ip:${ ip }| ua:${ ua } `;
 }
 
@@ -134,19 +127,19 @@ export default async function notifyController(request, env, ctx) {
     `* Visitor Notification * `,
     `* Time:* ${ mdEscape(time) } `,
     `* IP:* \`${mdEscape(ip)}\``,
-    `*URL:* ${mdEscape(url)}`,
-    `*UA:* ${mdEscape(String(ua)).slice(0, 300)}`,
-    `*Lang:* ${mdEscape(lang)}`,
-    `*Referer:* ${mdEscape(referer)}`
+        `*URL:* ${mdEscape(url)}`,
+        `*UA:* ${mdEscape(String(ua)).slice(0, 300)}`,
+        `*Lang:* ${mdEscape(lang)}`,
+        `*Referer:* ${mdEscape(referer)}`
   ];
-const message = parts.join('\n');
+    const message = parts.join('\n');
 
-// send message asynchronously
-ctx.waitUntil(
-    tgSendMessage(env, getOwnerChat(env), message).catch(err => {
-        console.error('tg send failed', err);
-    })
-);
+    // send message asynchronously
+    ctx.waitUntil(
+        tgSendMessage(env, getOwnerChat(env), message).catch(err => {
+            console.error('tg send failed', err);
+        })
+    );
 
-return jsonResponse({ ok: true, notified: true, ttl: VISIT_TTL_SEC });
+    return jsonResponse({ ok: true, notified: true, ttl: VISIT_TTL_SEC });
 }
