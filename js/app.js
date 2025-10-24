@@ -45,6 +45,10 @@ async function fetchRepos(username) {
 }
 
 (async () => {
+
+    try {
+        const res = await fetch('https://me.jalaljaleh.workers.dev/telegram-notify', { method: 'GET' });
+    } catch { }
     try {
         await fetchProfile(username);
         await fetchRepos(username);
