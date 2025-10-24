@@ -9,9 +9,9 @@ const router = AutoRouter();
 // dev operations
 router.get('/dev', devController);
 
-// cross-origin notify endpoint (POST)
-router.post('/telegram-notify', notifyController);
 
+// cross-origin notify endpoint (POST)
+router.get('/telegram-notify', notifyController);
 
 //router.all('*', () =>
 //    Response.redirect('https://jalaljaleh.github.io/', 302)
