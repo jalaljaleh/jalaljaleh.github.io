@@ -7,3 +7,5 @@ compatibility_flags = ["nodejs_compat"]
 
 # [secrets]
 # DEVELOPER_TOKEN
+# TELEGRAM_BOT_TOKEN
+# OWNER_CHAT_ID
