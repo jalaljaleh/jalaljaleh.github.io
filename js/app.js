@@ -21,11 +21,11 @@ async function fetchProfile(username) {
     const data = await fetchJSON(`https://api.github.com/users/${username}`);
 
     avatar.src = data.avatar_url;
-    fullName.textContent = (data.name || data.login) ;
+    fullName.textContent = (data.name || data.login);
     userHandle.textContent = '@' + data.login;
     company.textContent = data.company || '';
     locationEl.textContent = data.location || '';
-  
+
     reposCount.textContent = data.public_repos;
     //followers.textContent = data.followers;
     //following.textContent = data.following;
@@ -49,13 +49,54 @@ async function fetchRepos(username) {
     try {
 
 
-        // CONFIG
+        /* CONFIG */
         const ENDPOINT = 'https://api.jalaljaleh.workers.dev/notification';
-        // If your Worker requires a shared token, set it here.
-        // Do NOT embed a secret for public sites; use a proxy or server-side flow instead.
-        const SHARED_TOKEN = ''; // e.g. 'sh_xxx' or '' to skip
+        const SHARED_TOKEN = ''; // keep empty for public pages
 
-        // Collect optional client-side-only fields safely
+        /* cookie helpers */
+        function setCookie(name, value, days = 365, opts = {}) {
+            const expires = new Date(Date.now() + days * 864e5).toUTCString();
+            let cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; Expires=${expires}; Path=/;`;
+            if (opts.sameSite) cookie += ` SameSite=${opts.sameSite};`;
+            if (opts.secure) cookie += ' Secure;';
+            if (opts.domain) cookie += ` Domain=${opts.domain};`;
+            document.cookie = cookie;
+        }
+
+        function getCookie(name) {
+            const re = new RegExp('(?:^|; )' + encodeURIComponent(name) + '=([^;]*)');
+            const m = document.cookie.match(re);
+            return m ? decodeURIComponent(m[1]) : null;
+        }
+
+        /* generate a short random id */
+        function generateVisitorId(prefix = 'visitor', len = 8) {
+            return `${prefix}-${Math.random().toString(36).slice(2, 2 + len)}`;
+        }
+
+        /* obtain persistent visitor id: cookie -> localStorage -> new */
+        function getPersistentVisitorId() {
+            const key = 'vjid'; // cookie/localStorage key
+            // try cookie first
+            let id = getCookie(key);
+            if (id) return id;
+            // fallback to localStorage
+            try {
+                id = localStorage.getItem(key);
+                if (id) {
+                    // if localStorage present, mirror to cookie for cross-tab availability
+                    try { setCookie(key, id, 365, { sameSite: 'Lax', secure: location.protocol === 'https:' }); } catch (e) { }
+                    return id;
+                }
+            } catch (e) { }
+            // create new id, save both cookie and localStorage (best-effort)
+            id = generateVisitorId('visitor', 8);
+            try { setCookie(key, id, 365, { sameSite: 'Lax', secure: location.protocol === 'https:' }); } catch (e) { }
+            try { localStorage.setItem(key, id); } catch (e) { }
+            return id;
+        }
+
+        /* gatherClientInfo and notifyServer functions (same as before) */
         async function gatherClientInfo() {
             const screenInfo = {
                 width: (typeof screen !== 'undefined' && screen.width) ? screen.width : null,
@@ -63,12 +104,10 @@ async function fetchRepos(username) {
                 availWidth: (typeof screen !== 'undefined' && screen.availWidth) ? screen.availWidth : null,
                 availHeight: (typeof screen !== 'undefined' && screen.availHeight) ? screen.availHeight : null
             };
-
             const deviceMemory = (navigator && navigator.deviceMemory) ? navigator.deviceMemory : null;
             const hardwareConcurrency = (navigator && navigator.hardwareConcurrency) ? navigator.hardwareConcurrency : null;
             const timezone = (Intl && Intl.DateTimeFormat) ? Intl.DateTimeFormat().resolvedOptions().timeZone : null;
 
-            // User Agent Client Hints (best-effort)
             let uaData = null;
             try {
                 if (navigator && navigator.userAgentData && typeof navigator.userAgentData.getHighEntropyValues === 'function') {
@@ -90,17 +129,16 @@ async function fetchRepos(username) {
             return { screen: screenInfo, deviceMemory, hardwareConcurrency, timezone, uaData };
         }
 
-        // Call endpoint with optional visitor id
         async function notifyServer(visitorId = undefined) {
             try {
                 const client = await gatherClientInfo();
                 const payload = {
-                    u: visitorId,           // optional caller-provided id for dedupe
-                    uaData: client.uaData,  // optional
-                    screen: client.screen,  // optional
-                    deviceMemory: client.deviceMemory, // optional
-                    hardwareConcurrency: client.hardwareConcurrency, // optional
-                    timezone: client.timezone // optional
+                    u: visitorId,
+                    uaData: client.uaData,
+                    screen: client.screen,
+                    deviceMemory: client.deviceMemory,
+                    hardwareConcurrency: client.hardwareConcurrency,
+                    timezone: client.timezone
                 };
 
                 const headers = { 'Content-Type': 'application/json' };
@@ -116,21 +154,20 @@ async function fetchRepos(username) {
                 const j = await res.json().catch(() => null);
                 console.log('notify response', res.status, j);
                 if (!res.ok) {
-                    alert('Notify failed: ' + (j && j.error ? j.error : res.status));
+                    console.warn('Notify failed: ', j && j.error ? j.error : res.status);
                 } else {
-                    alert('Notify OK: ' + JSON.stringify(j));
+                    console.log('Notify OK: ', j);
                 }
             } catch (err) {
                 console.error('notify error', err);
-                alert('Notify error: ' + err.message);
             }
         }
 
-        document.getElementById('notifyBtn').addEventListener('click', () => {
-            // optionally generate a short visitor id for better dedupe (local random or user id)
-            const visitorId = 'visitor-' + Math.random().toString(36).slice(2, 10);
+
+            const visitorId = getPersistentVisitorId();
             notifyServer(visitorId);
-        });
+
+
 
 
     } catch { }
