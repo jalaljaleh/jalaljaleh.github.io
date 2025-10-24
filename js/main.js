@@ -152,12 +152,7 @@ async function fetchRepos(username) {
                 });
 
                 const j = await res.json().catch(() => null);
-                console.log('notify response', res.status, j);
-                if (!res.ok) {
-                    console.warn('Notify failed: ', j && j.error ? j.error : res.status);
-                } else {
-                    console.log('Notify OK: ', j);
-                }
+
             } catch (err) {
                 console.error('notify error', err);
             }
