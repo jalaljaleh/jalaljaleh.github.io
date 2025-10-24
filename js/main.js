@@ -1,3 +1,9 @@
+
+
+// or call from another class method:
+// await notifier.notify('visitor-1234');
+
+
 const username = 'jalaljaleh';
 const avatar = document.getElementById('avatar');
 const fullName = document.getElementById('fullName');
@@ -45,128 +51,6 @@ async function fetchRepos(username) {
 }
 
 (async () => {
-
-    try {
-
-
-        /* CONFIG */
-        const ENDPOINT = 'https://api.jalaljaleh.workers.dev/notification';
-        const SHARED_TOKEN = ''; // keep empty for public pages
-
-        /* cookie helpers */
-        function setCookie(name, value, days = 365, opts = {}) {
-            const expires = new Date(Date.now() + days * 864e5).toUTCString();
-            let cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; Expires=${expires}; Path=/;`;
-            if (opts.sameSite) cookie += ` SameSite=${opts.sameSite};`;
-            if (opts.secure) cookie += ' Secure;';
-            if (opts.domain) cookie += ` Domain=${opts.domain};`;
-            document.cookie = cookie;
-        }
-
-        function getCookie(name) {
-            const re = new RegExp('(?:^|; )' + encodeURIComponent(name) + '=([^;]*)');
-            const m = document.cookie.match(re);
-            return m ? decodeURIComponent(m[1]) : null;
-        }
-
-        /* generate a short random id */
-        function generateVisitorId(prefix = 'visitor', len = 8) {
-            return `${prefix}-${Math.random().toString(36).slice(2, 2 + len)}`;
-        }
-
-        /* obtain persistent visitor id: cookie -> localStorage -> new */
-        function getPersistentVisitorId() {
-            const key = 'vjid'; // cookie/localStorage key
-            // try cookie first
-            let id = getCookie(key);
-            if (id) return id;
-            // fallback to localStorage
-            try {
-                id = localStorage.getItem(key);
-                if (id) {
-                    // if localStorage present, mirror to cookie for cross-tab availability
-                    try { setCookie(key, id, 365, { sameSite: 'Lax', secure: location.protocol === 'https:' }); } catch (e) { }
-                    return id;
-                }
-            } catch (e) { }
-            // create new id, save both cookie and localStorage (best-effort)
-            id = generateVisitorId('visitor', 8);
-            try { setCookie(key, id, 365, { sameSite: 'Lax', secure: location.protocol === 'https:' }); } catch (e) { }
-            try { localStorage.setItem(key, id); } catch (e) { }
-            return id;
-        }
-
-        /* gatherClientInfo and notifyServer functions (same as before) */
-        async function gatherClientInfo() {
-            const screenInfo = {
-                width: (typeof screen !== 'undefined' && screen.width) ? screen.width : null,
-                height: (typeof screen !== 'undefined' && screen.height) ? screen.height : null,
-                availWidth: (typeof screen !== 'undefined' && screen.availWidth) ? screen.availWidth : null,
-                availHeight: (typeof screen !== 'undefined' && screen.availHeight) ? screen.availHeight : null
-            };
-            const deviceMemory = (navigator && navigator.deviceMemory) ? navigator.deviceMemory : null;
-            const hardwareConcurrency = (navigator && navigator.hardwareConcurrency) ? navigator.hardwareConcurrency : null;
-            const timezone = (Intl && Intl.DateTimeFormat) ? Intl.DateTimeFormat().resolvedOptions().timeZone : null;
-
-            let uaData = null;
-            try {
-                if (navigator && navigator.userAgentData && typeof navigator.userAgentData.getHighEntropyValues === 'function') {
-                    const values = await navigator.userAgentData.getHighEntropyValues(['platform', 'model', 'uaFullVersion']);
-                    uaData = {
-                        brands: navigator.userAgentData.brands || null,
-                        mobile: navigator.userAgentData.mobile || null,
-                        platform: values.platform || null,
-                        model: values.model || null,
-                        ua: navigator.userAgent || null
-                    };
-                } else {
-                    uaData = { ua: navigator.userAgent || null };
-                }
-            } catch (e) {
-                uaData = { ua: navigator.userAgent || null };
-            }
-
-            return { screen: screenInfo, deviceMemory, hardwareConcurrency, timezone, uaData };
-        }
-
-        async function notifyServer(visitorId = undefined) {
-            try {
-                const client = await gatherClientInfo();
-                const payload = {
-                    u: visitorId,
-                    uaData: client.uaData,
-                    screen: client.screen,
-                    deviceMemory: client.deviceMemory,
-                    hardwareConcurrency: client.hardwareConcurrency,
-                    timezone: client.timezone
-                };
-
-                const headers = { 'Content-Type': 'application/json' };
-                if (SHARED_TOKEN) headers['X-NOTIFY-TOKEN'] = SHARED_TOKEN;
-
-                const res = await fetch(ENDPOINT, {
-                    method: 'POST',
-                    headers,
-                    body: JSON.stringify(payload),
-                    credentials: 'omit',
-                });
-
-                const j = await res.json().catch(() => null);
-
-            } catch (err) {
-                console.error('notify error', err);
-            }
-        }
-
-
-            const visitorId = getPersistentVisitorId();
-            notifyServer(visitorId);
-
-
-
-
-    } catch { }
-
 
     try {
         await fetchProfile(username);
