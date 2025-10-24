@@ -13,8 +13,16 @@ router.get('/dev', devController);
 router.post('/telegram-notify', notifyController);
 
 
-router.all('*', () =>
-    Response.redirect('https://jalaljaleh.github.io/', 302)
-);
+//router.all('*', () =>
+//    Response.redirect('https://jalaljaleh.github.io/', 302)
+//);
+
+
+router.all('*', (request, env, ctx) => {
+    return new Response(JSON.stringify({ ok: false, error: 'not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' }
+    });
+});
 
 export default { fetch: router.fetch };
