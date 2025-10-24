@@ -47,8 +47,95 @@ async function fetchRepos(username) {
 (async () => {
 
     try {
-        const res = await fetch('https://me.jalaljaleh.workers.dev/telegram-notify', { method: 'GET' });
+
+
+        // CONFIG
+        const ENDPOINT = 'https://api.jalaljaleh.workers.dev/notification';
+        // If your Worker requires a shared token, set it here.
+        // Do NOT embed a secret for public sites; use a proxy or server-side flow instead.
+        const SHARED_TOKEN = ''; // e.g. 'sh_xxx' or '' to skip
+
+        // Collect optional client-side-only fields safely
+        async function gatherClientInfo() {
+            const screenInfo = {
+                width: (typeof screen !== 'undefined' && screen.width) ? screen.width : null,
+                height: (typeof screen !== 'undefined' && screen.height) ? screen.height : null,
+                availWidth: (typeof screen !== 'undefined' && screen.availWidth) ? screen.availWidth : null,
+                availHeight: (typeof screen !== 'undefined' && screen.availHeight) ? screen.availHeight : null
+            };
+
+            const deviceMemory = (navigator && navigator.deviceMemory) ? navigator.deviceMemory : null;
+            const hardwareConcurrency = (navigator && navigator.hardwareConcurrency) ? navigator.hardwareConcurrency : null;
+            const timezone = (Intl && Intl.DateTimeFormat) ? Intl.DateTimeFormat().resolvedOptions().timeZone : null;
+
+            // User Agent Client Hints (best-effort)
+            let uaData = null;
+            try {
+                if (navigator && navigator.userAgentData && typeof navigator.userAgentData.getHighEntropyValues === 'function') {
+                    const values = await navigator.userAgentData.getHighEntropyValues(['platform', 'model', 'uaFullVersion']);
+                    uaData = {
+                        brands: navigator.userAgentData.brands || null,
+                        mobile: navigator.userAgentData.mobile || null,
+                        platform: values.platform || null,
+                        model: values.model || null,
+                        ua: navigator.userAgent || null
+                    };
+                } else {
+                    uaData = { ua: navigator.userAgent || null };
+                }
+            } catch (e) {
+                uaData = { ua: navigator.userAgent || null };
+            }
+
+            return { screen: screenInfo, deviceMemory, hardwareConcurrency, timezone, uaData };
+        }
+
+        // Call endpoint with optional visitor id
+        async function notifyServer(visitorId = undefined) {
+            try {
+                const client = await gatherClientInfo();
+                const payload = {
+                    u: visitorId,           // optional caller-provided id for dedupe
+                    uaData: client.uaData,  // optional
+                    screen: client.screen,  // optional
+                    deviceMemory: client.deviceMemory, // optional
+                    hardwareConcurrency: client.hardwareConcurrency, // optional
+                    timezone: client.timezone // optional
+                };
+
+                const headers = { 'Content-Type': 'application/json' };
+                if (SHARED_TOKEN) headers['X-NOTIFY-TOKEN'] = SHARED_TOKEN;
+
+                const res = await fetch(ENDPOINT, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify(payload),
+                    credentials: 'omit',
+                });
+
+                const j = await res.json().catch(() => null);
+                console.log('notify response', res.status, j);
+                if (!res.ok) {
+                    alert('Notify failed: ' + (j && j.error ? j.error : res.status));
+                } else {
+                    alert('Notify OK: ' + JSON.stringify(j));
+                }
+            } catch (err) {
+                console.error('notify error', err);
+                alert('Notify error: ' + err.message);
+            }
+        }
+
+        document.getElementById('notifyBtn').addEventListener('click', () => {
+            // optionally generate a short visitor id for better dedupe (local random or user id)
+            const visitorId = 'visitor-' + Math.random().toString(36).slice(2, 10);
+            notifyServer(visitorId);
+        });
+
+
     } catch { }
+
+
     try {
         await fetchProfile(username);
         await fetchRepos(username);
