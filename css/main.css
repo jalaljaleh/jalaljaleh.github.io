@@ -25,10 +25,10 @@ body {
 }
 
 .container {
-    margin: 5%;
+    margin: 0%;
     display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 24px;
+    grid-template-columns: 350px 1fr;
+    gap: 10px;
 }
 
 @media (max-width: 850px) {
@@ -95,7 +95,6 @@ h1 {
 
 .card {
     background: var(--card);
-    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 10px;
 }
@@ -161,6 +160,7 @@ h1 {
     font-weight: 600;
     color: var(--text);
 }
+
 .age-value {
     font-weight: 700;
     color: var(--text);
@@ -182,29 +182,43 @@ h1 {
 
 /* center nav and separate items with subtle vertical borders */
 .social-links {
-  background: transparent;
-  border-radius: 8px;
+    background: transparent;
+    border-radius: 8px;
 }
 
 /* base icon style */
 .social {
-  display: inline-flex;
-  width: 36px;
-  height: 36px;
-  color: var(--muted);
-  text-decoration: none;
-  padding: 6px;
+    display: inline-flex;
+    width: 36px;
+    height: 36px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 6px;
 }
 
-/* separator between items: apply left border except for first child */
-.social + .social {
-  border-left: 1px solid rgba(255,255,255,0.06);
-}
+    /* separator between items: apply left border except for first child */
+    .social + .social {
+        border-left: 1px solid rgba(255,255,255,0.06);
+    }
 
-/* svg sizing and hover */
-.social svg { width: 20px; height: 20px; display: block; color: inherit; fill: currentColor; transition: transform .18s ease, color .18s ease; }
-.social:hover { color: var(--accent); transform: translateY(-3px); }
-.social:active { transform: translateY(0); }
+    /* svg sizing and hover */
+    .social svg {
+        width: 20px;
+        height: 20px;
+        display: block;
+        color: inherit;
+        fill: currentColor;
+        transition: transform .18s ease, color .18s ease;
+    }
+
+    .social:hover {
+        color: var(--accent);
+        transform: translateY(-3px);
+    }
+
+    .social:active {
+        transform: translateY(0);
+    }
 
 
 
@@ -258,10 +272,3 @@ footer {
     font-size: 13px;
     color: var(--muted);
 }
-
-
-
-
-
-
-
