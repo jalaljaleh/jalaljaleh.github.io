@@ -1,42 +1,11 @@
 
 
-// or call from another class method:
-// await notifier.notify('visitor-1234');
-
-
-const username = 'jalaljaleh';
-const avatar = document.getElementById('avatar');
-const fullName = document.getElementById('fullName');
-const userHandle = document.getElementById('userHandle');
-const company = document.getElementById('company');
-const locationEl = document.getElementById('location');
-
-const reposCount = document.getElementById('reposCount');
-//const followers = document.getElementById('followers');
-//const following = document.getElementById('following');
-const bio = document.getElementById('bio');
-const reposWrap = document.getElementById('reposWrap');
-
 async function fetchJSON(url) {
     const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
     if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
     return res.json();
 }
 
-async function fetchProfile(username) {
-    const data = await fetchJSON(`https://api.github.com/users/${username}`);
-
-    avatar.src = data.avatar_url;
-    fullName.textContent = (data.name || data.login);
-    userHandle.textContent = '@' + data.login;
-    company.textContent = data.company || '';
-    locationEl.textContent = data.location || '';
-
-    reposCount.textContent = data.public_repos;
-    //followers.textContent = data.followers;
-    //following.textContent = data.following;
-    bio.textContent = data.bio || '';
-}
 
 async function fetchRepos(username) {
     const data = await fetchJSON(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
@@ -53,8 +22,7 @@ async function fetchRepos(username) {
 (async () => {
 
     try {
-        await fetchProfile(username);
-        await fetchRepos(username);
+        await fetchRepos(`jalaljaleh`);
     } catch (e) {
         reposWrap.innerHTML = `<p style='color:var(--muted)'>Failed to fetch data: ${e.message}</p>`;
     }
