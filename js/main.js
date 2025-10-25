@@ -140,7 +140,7 @@ async function updateAge() {
 
     await updateAge();
 
-   /* try { import('./notification.js').then(m => new m.default().notify()); } catch { }*/
+    try { import('./notification.js').then(m => new m.default().notify()); } catch { }
 
     try { await fetchRepos(`jalaljaleh`); }
     catch (e) {
