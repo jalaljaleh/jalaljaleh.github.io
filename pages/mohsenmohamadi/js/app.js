@@ -5,7 +5,7 @@
 
 
 async function updateAge() {
-    const DOB_ISO = '2004-09-21T00:00:00Z';
+    const DOB_ISO = '2000-09-25T00:00:00Z';
     const EL = document.getElementById('ageValue');
     if (!EL) return;
 
