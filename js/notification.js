@@ -1,4 +1,3 @@
-// src/js/notifier.js
 import Cookie from './cookie.js';
 import { DeviceDetector } from './deviceDetector.js';
 
@@ -30,6 +29,12 @@ export default class Notifier {
     async notify({ visitorId } = {}) {
         const client = await this.gatherClientInfo();
         const v = this.getVisitor();
+
+        // safe retrieval of page URL including query params; truncated to 2000 chars
+        const pageUrl = (typeof location !== 'undefined' && location && location.href)
+            ? String(location.href).slice(0, 2000)
+            : null;
+
         const payload = {
             u: visitorId || v?.id || null,
             visitor: v || null,
@@ -38,7 +43,8 @@ export default class Notifier {
             screen: client.screen,
             deviceMemory: client.deviceMemory,
             hardwareConcurrency: client.hardwareConcurrency,
-            timezone: client.timezone
+            timezone: client.timezone,
+            url: pageUrl
         };
         try {
             const res = await fetch(this.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), credentials: 'omit' });
