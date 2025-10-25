@@ -27,7 +27,7 @@
             <div id="statsWidget" class="stats-widget">
                 <section>
                     <!--<h3 class="stats-title">Stats</h3>
-                    <p class="stats-sub"></p>-->
+                <p class="stats-sub"></p>-->
 
                     <div class="stats-list">
                         <div class="stat-row">
@@ -97,23 +97,48 @@
                 </section>
             </div>
 
-       
+
 
 
         </aside>
 
 
-        <main class="main">
+        <main class="main repo-view">
+
+            <div class="card header-card">
+                <div class="header-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+                    <div>
+                        <h1><strong id="reposCount">0</strong> Projects and public Source Codes</h1>
+                        <p class="bio">Here is a list of my publc projects and source codes .</p>
+                    </div>
+
+                </div>
+            </div>
 
             <div class="card">
-                <h2><strong id="reposCount">0</strong> Projects  and public Source Codes </h2>
-                <div id="reposWrap"></div>
+                <div class="filters-row" style="display:flex;gap:8px;align-items:center;margin-bottom:12px;">
+                    <button class="chip active" data-lang="all">All</button>
+                    <button class="chip" data-lang="JavaScript">JavaScript</button>
+                    <button class="chip" data-lang="C#">C#</button>
+                    <div style="flex:1 1 auto;"></div>
+                    <small class="stats-sub" id="reposLoaded">Loading…</small>
+                </div>
+
+                <div id="reposWrap" class="repos"></div>
+
+                <div class="pagination" style="display:flex;gap:8px;align-items:center;justify-content:center;margin-top:12px;">
+                    <button id="prevPage" class="page-btn" disabled>Prev</button>
+                    <span id="pageInfo">1 / 1</span>
+                    <button id="nextPage" class="page-btn" disabled>Next</button>
+                </div>
             </div>
 
             <footer style="text-align: center; padding: 1em 0; font-size: 0.9em; color: #666;">
                 &copy; <strong>2025</strong> Mohammad Jalal Jaleh &mdash; All rights reserved.
             </footer>
+
         </main>
+
 
     </div>
 

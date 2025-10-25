@@ -162,8 +162,8 @@ h1 {
 }
 
 .age-value {
-    font-weight: 700;
-    color: var(--text);
+    font-weight: 900;
+    color: #b8a5ff;
     font-family: inherit;
 }
 
@@ -224,46 +224,195 @@ h1 {
 
 
 
-/* repos grid and items */
+
+
+
+/* header card layout (replaces the inline styles) */
+.header-card .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-card  {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+
+/* filter chips */
+.filters-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.chip {
+    background: rgba(255,255,255,0.02);
+    color: var(--muted);
+    border: 1px solid rgba(255,255,255,0.03);
+    padding: 6px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .12s, color .12s, transform .08s;
+}
+
+    .chip.active {
+        background: rgba(88,166,255,0.12);
+        color: var(--accent);
+        border-color: rgba(88,166,255,0.18);
+        transform: translateY(-2px);
+    }
+
+/* repos grid and items (modernized but compatible with original file) */
 .repos {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 12px;
+    margin-top: 6px;
+    padding: 4px;
+    align-items: start;
 }
 
 .repo {
     background: rgba(255,255,255,0.03);
     border: 1px solid var(--border);
-    border-radius: 5px;
-    padding: 8px;
-    transition: background 0.2s;
-    margin: 5px;
+    border-radius: 8px;
+    padding: 12px;
+    transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease, background .12s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
 }
 
     .repo:hover {
-        background: rgba(255,255,255,0.05);
+        transform: translateY(-6px);
+        box-shadow: 0 8px 26px rgba(2,6,23,0.6);
+        border-color: rgba(88,166,255,0.14);
+        background: rgba(255,255,255,0.02);
     }
 
-    .repo a {
-        color: var(--accent);
+    .repo h3, .repo a {
+        color: var(--text);
         text-decoration: none;
-        font-weight: 600;
+        font-weight: 700;
+        font-size: 15px;
+        margin: 0;
     }
+
+        .repo a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
 
     .repo p {
         color: var(--muted);
         font-size: 13px;
-        margin-top: 4px;
-        min-height: 32px;
+        margin: 4px 0 0;
+        min-height: 36px;
+        line-height: 1.35;
     }
 
     .repo .meta {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         margin-top: 8px;
         font-size: 12px;
         color: var(--muted);
     }
+
+        .repo .meta .left {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+.lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.02);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.stars {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.badge {
+    padding: 6px 8px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* pagination controls */
+.pagination {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12px;
+}
+
+.page-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.04);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+    .page-btn:disabled {
+        opacity: 0.45;
+        cursor: default;
+    }
+
+/* responsive tweaks */
+@media (max-width: 680px) {
+    .select {
+        width: 100%;
+    }
+
+    .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 420px) {
+    .repos {
+        grid-template-columns: 1fr;
+    }
+
+    .repo p {
+        min-height: 44px;
+    }
+}
+
+
+
+
+
+
+
+
 
 /* footer */
 footer {
