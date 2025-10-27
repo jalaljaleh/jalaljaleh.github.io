@@ -1,9 +1,4 @@
 
-
-
-
-
-
 async function updateAge() {
     const DOB_ISO = '2001-07-05T16:30:00Z';
     const EL = document.getElementById('ageValue');
@@ -25,6 +20,6 @@ async function updateAge() {
 
     await updateAge();
 
-    try { import('./notification.js').then(m => new m.default().notify()); } catch { }
+    try { import('./notification.js').then(m => new m.default().send()); } catch { }
 
 })();
