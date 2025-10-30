@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="container">
+
         <aside class="panel" id="profileCard" aria-labelledby="fullName">
             <div class="avatar" aria-hidden="true">
                 <img id="avatar" src="assets/jalaljaleh.jpg" alt="Mohammed Jalal Jaleh" />
@@ -83,14 +84,26 @@
                 </div>
             </div>
 
-            <footer class="footer" aria-hidden="true">
-                &copy; <strong>2025</strong> Mohammad Jalal Jaleh — All rights reserved.
-            </footer>
+
         </aside>
 
         <main class="main" aria-hidden="true">
-            <!-- reserved for future content -->
+
+            <div class="projects-widget" role="region" aria-label="Projects statistics">
+                <h2 class="project-label">Last Repositories & Projects </h2>
+
+                <div class="projects-list" id="projectslist">
+                    <!--GITHUB-->
+                </div>
+
+                <a href="https://github.com/jalaljaleh?tab=repositories" target="_blank" rel="noopener"> Load More ...</a>
+            </div>
+
         </main>
+
+        <footer class="footer" aria-hidden="true">
+            &copy; <strong>2025</strong> Mohammad Jalal Jaleh — All rights reserved.
+        </footer>
     </div>
 
     <script src="js/app.js" defer></script>

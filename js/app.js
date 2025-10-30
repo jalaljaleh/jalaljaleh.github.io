@@ -16,10 +16,18 @@ async function updateAge() {
 };
 
 
+
+
 (async () => {
 
     await updateAge();
 
-    try { import('./notification.js').then(m => new m.default().send()); } catch { }
+    import('./notification.js')
+        .then(m => new m.default().send())
+        .catch(console.error);
+
+    import('./githubRepositories.js')
+        .then(mod => mod.renderProjects())
+        .catch(console.error);
 
 })();
