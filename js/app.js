@@ -22,9 +22,9 @@ async function updateAge() {
 
     await updateAge();
 
-    import('./notification.js')
-        .then(m => new m.default().send())
-        .catch(console.error);
+    //import('./notification.js')
+    //    .then(m => new m.default().send())
+    //    .catch(console.error);
 
     import('./githubRepositories.js')
         .then(mod => mod.renderProjects())
