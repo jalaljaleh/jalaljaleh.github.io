@@ -33,10 +33,8 @@ async function updateAge() {
 })();
 
 (function () {
-    // prefer same-origin; if your frontend is hosted elsewhere use the https URL
-    const RELATIVE = '/contact';
-    const ABSOLUTE = 'https://api.jalaljaleh.workers.dev/contact';
-    const ENDPOINT = (location.hostname === 'api.jalaljaleh.workers.dev') ? ABSOLUTE : RELATIVE;
+
+    const ENDPOINT = 'https://api.jalaljaleh.workers.dev/contact';
 
     const openBtn = document.getElementById('openContact');
     const form = document.getElementById('contactForm');
