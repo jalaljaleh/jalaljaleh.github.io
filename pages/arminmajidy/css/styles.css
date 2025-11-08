@@ -236,7 +236,7 @@ body {
 }
 
 /* Light mode */
-@media (prefers-color-scheme:light) {
+@media (prefers-color-scheme:dark) {
     :root {
         --bg: #f6f8fa;
         --card: #ffffff;

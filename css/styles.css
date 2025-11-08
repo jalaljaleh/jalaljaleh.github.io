@@ -369,18 +369,6 @@ body {
     }
 }
 
-/* Light mode */
-@media (prefers-color-scheme:light) {
-    :root {
-        --bg: #f6f8fa;
-        --card: #ffffff;
-        --border: #e1e4e8;
-        --muted: #6b7280;
-        --text: #0f1720;
-        --accent: #0969da;
-    }
-}
-
 
 
 a {
