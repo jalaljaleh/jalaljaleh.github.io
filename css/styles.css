@@ -43,18 +43,19 @@ body {
 .container {
     /*   width: 100%;*/
     max-width: 1100px;
-    display: grid;
+    display: inherit;
     grid-template-columns: minmax(0,var(--side-width)) 1fr;
     gap: var(--gap);
     align-items: start;
     align-content: start;
-    background-color: #0e0e0e;
+  /*  background-color: #0e0e0e;*/
     border-radius: 10px;
 }
 
 @media (max-width:880px) {
     .container {
-        grid-template-columns: 1fr
+        display: grid;
+        grid-template-columns: 1fr;
     }
 }
 
@@ -217,8 +218,10 @@ body {
 /* main */
 .main {
     padding: clamp(14px, 2vw, 20px);
-    background-color: #0e0e0e;
+    background-color: #0000005e;
     border-radius: 10px;
+    border-radius: calc(var(--radius) - 2px);
+    border: 2px solid rgb(184 165 255 / 24%);
 }
 
 
@@ -226,7 +229,7 @@ body {
 
 /* projects */
 .projects-widget {
-    background-color: #0e0e0e;
+  /*  background-color: #0e0e0e;*/
 }
 
 .projects-list {
@@ -265,6 +268,67 @@ body {
     color: var(--muted);
     font-size: var(--fz-sm)
 }
+
+
+
+
+
+
+
+
+/* contact / support small helpers */
+.btn-link {
+    background: transparent;
+    border: none;
+    color: #b8a5ff;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+}
+
+    .btn-link:hover {
+        background: rgba(194,145,255,0.08);
+        color: var(--accent);
+    }
+
+.btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.04);
+    color: var(--muted);
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg,#7a65ff,#c291ff);
+    color: #0f0a1a;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+    .btn-primary:hover {
+        filter: brightness(0.95);
+    }
+
+/* keep form inputs visually consistent */
+#contactForm input, #contactForm textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.support-block {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: calc(var(--radius) - 6px);
+    border: 1px solid rgba(255,255,255,0.02);
+}
+
+
+
+
 
 
 
