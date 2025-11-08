@@ -10,8 +10,8 @@
     --side-width: 450px;
     --ui-font: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     --fz-sm: 13px;
-    --fz-base: 15px;
-    --fz-lg: 18px;
+    --fz-base: 14px;
+    --fz-lg: 15px;
 }
 
 /* Box sizing and base */
@@ -280,9 +280,8 @@ body {
     border: none;
     color: #ffffffcf;
     cursor: pointer;
-    padding: 8px 24px;
+    padding: 8px 4px;
     border-radius: 4px;
-    font-weight: bold;
 }
 
     .btn-link:hover {
