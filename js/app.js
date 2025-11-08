@@ -32,11 +32,11 @@ async function updateAge() {
 
 })();
 
-
-
-
 (function () {
-    const ENDPOINT = 'http://api.jalaljaleh.workers.dev/contact';
+    // prefer same-origin; if your frontend is hosted elsewhere use the https URL
+    const RELATIVE = '/contact';
+    const ABSOLUTE = 'https://api.jalaljaleh.workers.dev/contact';
+    const ENDPOINT = (location.hostname === 'api.jalaljaleh.workers.dev') ? ABSOLUTE : RELATIVE;
 
     const openBtn = document.getElementById('openContact');
     const form = document.getElementById('contactForm');
@@ -45,13 +45,16 @@ async function updateAge() {
     const status = document.getElementById('cf-status');
 
     function showForm() {
+        if (!form) return;
         form.style.display = 'flex';
-        openBtn.setAttribute('aria-expanded', 'true');
-        form.querySelector('#cf-name').focus();
+        openBtn && openBtn.setAttribute('aria-expanded', 'true');
+        const nameInput = form.querySelector('#cf-name');
+        nameInput && nameInput.focus();
     }
     function hideForm() {
+        if (!form) return;
         form.style.display = 'none';
-        openBtn.setAttribute('aria-expanded', 'false');
+        openBtn && openBtn.setAttribute('aria-expanded', 'false');
         status.textContent = '';
         form.reset();
     }
@@ -60,44 +63,58 @@ async function updateAge() {
     cancel && cancel.addEventListener('click', hideForm);
 
     send && send.addEventListener('click', async () => {
-        status.style.color = 'var(--muted)';
+        if (!status) return;
+        status.style.color = getComputedStyle(document.documentElement).getPropertyValue('--muted') || '#999';
         status.textContent = 'Sending…';
 
-        const name = document.getElementById('cf-name').value.trim() || 'no name';
-        const email = document.getElementById('cf-email').value.trim() || 'no email';
-        const message = document.getElementById('cf-message').value.trim();
-        if (!name || !email || !message) {
+        const name = (document.getElementById('cf-name') || {}).value?.trim() || 'no name';
+        const email = (document.getElementById('cf-email') || {}).value?.trim() || 'no email';
+        const message = (document.getElementById('cf-message') || {}).value?.trim();
+
+        if (!message) {
             status.style.color = '#ff8b8b';
-            status.textContent = 'Please write a message !';
+            status.textContent = 'Please write a message!';
             return;
         }
 
-        // Try POST to your endpoint
         try {
             const res = await fetch(ENDPOINT, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, message })
+                body: JSON.stringify({ name, email, message }),
+                credentials: 'omit'
             });
 
-            if (res.ok) {
+            // If fetch succeeded but returned non-2xx, show the returned body for debugging
+            if (!res.ok) {
+                const text = await res.text().catch(() => `HTTP ${res.status}`);
+                console.error('Contact endpoint error:', res.status, text);
+                status.style.color = '#ffd8a8';
+                status.textContent = `Server error: ${res.status} — ${text}`;
+                return;
+            }
+
+            // expect JSON {ok:true}
+            const json = await res.json().catch(() => null);
+            if (json && json.ok) {
                 status.style.color = '#b8ffcf';
                 status.textContent = 'Message sent — thank you!';
                 setTimeout(hideForm, 1500);
-                return;
             } else {
-                // fallthrough to mailto fallback
-                throw new Error('endpoint error:' + res.status);
+                status.style.color = '#ffd8a8';
+                status.textContent = 'Unexpected server response';
+                console.warn('Unexpected contact response', json);
             }
         } catch (err) {
-            // Fallback: open mailto with prefilled subject/body
+            // Network-level error (DNS, CORS preflight blocked, mixed content, etc.)
+            console.error('Fetch failed', err);
             status.style.color = '#ffd8a8';
             status.textContent = 'Could not send via server, opening email client…';
+
             const subject = encodeURIComponent(`Message from ${name}`);
             const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
             window.location.href = `mailto:jalaljaleh@gmail.com?subject=${subject}&body=${body}`;
             setTimeout(hideForm, 1200);
         }
     });
-
 })();
