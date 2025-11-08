@@ -97,7 +97,7 @@ async function updateAge() {
             if (json && json.ok) {
                 status.style.color = '#b8ffcf';
                 status.textContent = 'Message sent — thank you!';
-                setTimeout(hideForm, 1500);
+                setTimeout(hideForm, 5000);
             } else {
                 status.style.color = '#ffd8a8';
                 status.textContent = 'Unexpected server response';
@@ -112,7 +112,7 @@ async function updateAge() {
             const subject = encodeURIComponent(`Message from ${name}`);
             const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
             window.location.href = `mailto:jalaljaleh@gmail.com?subject=${subject}&body=${body}`;
-            setTimeout(hideForm, 1200);
+            setTimeout(hideForm, 4000);
         }
     });
 })();
