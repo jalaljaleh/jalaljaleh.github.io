@@ -217,11 +217,8 @@ body {
 
 /* main */
 .main {
-    padding: clamp(14px, 2vw, 20px);
-    background-color: #0000005e;
-    border-radius: 10px;
-    border-radius: calc(var(--radius) - 2px);
-    border: 2px solid rgb(184 165 255 / 24%);
+    margin: auto;
+    padding-bottom: 15px;
 }
 
 
@@ -229,7 +226,8 @@ body {
 
 /* projects */
 .projects-widget {
-  /*  background-color: #0e0e0e;*/
+    padding: clamp(14px, 2vw, 20px);
+    background-color: #00000021;
 }
 
 .projects-list {
@@ -278,12 +276,13 @@ body {
 
 /* contact / support small helpers */
 .btn-link {
-    background: transparent;
+    background: linear-gradient(54deg, #5755f5, #4733b7);
     border: none;
-    color: #b8a5ff;
+    color: #ffffffcf;
     cursor: pointer;
-    padding: 4px 6px;
-    border-radius: 6px;
+    padding: 8px 24px;
+    border-radius: 4px;
+    font-weight: bold;
 }
 
     .btn-link:hover {
@@ -304,7 +303,7 @@ body {
     background: linear-gradient(90deg,#7a65ff,#c291ff);
     color: #0f0a1a;
     border: none;
-    padding: 8px 12px;
+    padding: 12px 44px;
     border-radius: 6px;
     cursor: pointer;
 }
@@ -322,8 +321,7 @@ body {
 .support-block {
     margin-top: 12px;
     padding: 10px;
-    border-radius: calc(var(--radius) - 6px);
-    border: 1px solid rgba(255,255,255,0.02);
+    background: #0b0f14;
 }
 
 
@@ -342,7 +340,7 @@ body {
 /* Footer */
 .footer {
     text-align: center;
-    padding-bottom: 10px;
+    padding: 20px;
     font-size: var(--fz-sm);
     color: var(--muted)
 }

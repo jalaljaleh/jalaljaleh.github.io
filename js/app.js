@@ -46,8 +46,8 @@ async function updateAge() {
         if (!form) return;
         form.style.display = 'flex';
         openBtn && openBtn.setAttribute('aria-expanded', 'true');
-        const nameInput = form.querySelector('#cf-name');
-        nameInput && nameInput.focus();
+        const messageInput = form.querySelector('#cf-message');
+        messageInput && messageInput.focus();
     }
     function hideForm() {
         if (!form) return;
