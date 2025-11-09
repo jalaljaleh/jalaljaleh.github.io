@@ -1,9 +1,9 @@
 
 async function loadRepos() {
-    const res = await fetch('https://api.github.com/users/jalaljaleh/repos?sort=stars&per_page=7');
+    const res = await fetch('https://api.github.com/search/repositories?q=user:jalaljaleh&sort=stars&order=desc&per_page=8');
     const repos = await res.json();
 
-    return repos.filter(r => !r.fork).map(r => ({
+    return repos.items.filter(r => !r.fork).map(r => ({
         title: r.name,
         description: r.description,
         url: r.html_url,
