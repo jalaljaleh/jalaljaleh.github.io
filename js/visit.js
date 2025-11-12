@@ -126,14 +126,17 @@ export default class Notifier {
                 headers,
                 body: JSON.stringify(payload),
                 credentials: 'omit',
-                mode: 'cors'
+                mode: 'cors',
+                cache: 'no-store'
             });
-            // server intentionally returns 404 body; attempt to parse JSON if provided
-            return await res.json().catch(() => ({ ok: res.ok, status: res.status }));
-        } catch (e) {
-            return { ok: false, error: String(e) };
+
+           
+        } catch (err) {
+          
+            return { ok: false, error: String(err) };
         }
     }
+
 }
 
 /* helpers */
