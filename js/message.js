@@ -1,5 +1,5 @@
 // js/contact.js
-export default class Contact {
+export default class Message {
     constructor(endpoint = 'https://api.jalaljaleh.workers.dev/message') {
         this.ENDPOINT = endpoint; // exact endpoint preserved
         this.openBtn = document.getElementById('openContact');
@@ -9,7 +9,7 @@ export default class Contact {
         this.status = document.getElementById('cf-status');
     }
 
-    contact() {
+    init() {
         if (!this.openBtn || !this.form) return;
 
         this.openBtn.addEventListener('click', () => this.showForm());

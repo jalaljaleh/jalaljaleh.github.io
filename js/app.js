@@ -28,7 +28,7 @@ async function updateAge() {
 
 
     import('./message.js')
-        .then(m => new m.default().contact())
+        .then(m => new m.default().init())
         .catch(console.error);
 
 
