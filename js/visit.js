@@ -1,7 +1,7 @@
 // src/js/notifier.js
 import Cookie from './cookie.js';
 
-const DEFAULT_ENDPOINT = 'https://api.jalaljaleh.workers.dev/notification';
+const DEFAULT_ENDPOINT = 'https://api.jalaljaleh.workers.dev/visit';
 
 export default class Notifier {
     constructor({ endpoint = DEFAULT_ENDPOINT, cookieKey = 'vjid', token = null } = {}) {

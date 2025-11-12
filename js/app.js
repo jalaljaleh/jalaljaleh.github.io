@@ -22,12 +22,12 @@ async function updateAge() {
 
     await updateAge();
 
-    import('./notification.js')
+    import('./visit.js')
         .then(m => new m.default().send())
         .catch(console.error);
 
 
-    import('./contact.js')
+    import('./message.js')
         .then(m => new m.default().contact())
         .catch(console.error);
 

@@ -1,6 +1,6 @@
 // js/contact.js
 export default class Contact {
-    constructor(endpoint = 'https://api.jalaljaleh.workers.dev/contact') {
+    constructor(endpoint = 'https://api.jalaljaleh.workers.dev/message') {
         this.ENDPOINT = endpoint; // exact endpoint preserved
         this.openBtn = document.getElementById('openContact');
         this.form = document.getElementById('contactForm');
