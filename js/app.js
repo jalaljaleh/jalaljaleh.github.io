@@ -36,6 +36,5 @@ async function updateAge() {
         .then(mod => mod.renderProjects())
         .catch(console.error);
 
-
 })();
 
