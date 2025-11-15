@@ -36,5 +36,9 @@ async function updateAge() {
         .then(mod => mod.renderProjects())
         .catch(console.error);
 
+    import('./posts.js')
+        .then(mod => mod.renderWeblogPosts())
+        .catch(console.error);
+
 })();
 
