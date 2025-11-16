@@ -128,11 +128,11 @@ export async function renderWeblogPosts(opts = {}) {
         const json = await fetchPostsWithFallback();
 
         // json may be the API object directly, ensure shape
-        if (!json || !json.ok || !Array.isArray(json.results)) {
+        if (!json || !json.ok || !Array.isArray(json.data)) {
             throw new Error('Unexpected API response');
         }
 
-        const posts = json.results;
+        const posts = json.data;
         status.remove();
 
         if (!posts.length) {
