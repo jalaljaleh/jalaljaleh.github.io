@@ -78,11 +78,9 @@ body {
 
 
 
-
-
 /* Avatar — polished shadow, hover/focus lift, responsive */
 .avatar {
-    width: clamp(88px, 22vw, 280px);
+    width:280px;
     aspect-ratio: 1 / 1;
     margin: 0 auto;
     border-radius: 999px;
