@@ -343,6 +343,7 @@ body {
     align-items: center;
     margin-bottom: 10px;
     font-size: 0.95rem;
+    justify-content: flex-end;
 }
 
 .post-id {
@@ -546,11 +547,11 @@ body {
 
     /* ensure text alignment follows direction */
     .post-row:dir(rtl) .post-body {
-        text-align: right;
+        direction: rtl;
     }
 
 .post-row:dir(ltr) .post-body {
-    text-align: right;
+    direction: rtl;
 }
 
 /* ---------------------------

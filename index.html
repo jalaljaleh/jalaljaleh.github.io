@@ -116,7 +116,69 @@
 
         <main class="main" aria-hidden="true">
 
-           
+            <section id="resume" class="resume" role="region" aria-labelledby="resume-heading">
+                <header class="resume-header">
+                    <h2 id="resume-heading" class="resume-title">Resume </h2>
+
+                </header>
+
+                <div class="resume-grid">
+                    <!-- Contact / quick facts -->
+                    <aside class="resume-contact" aria-label="Contact and quick facts">
+
+
+
+                        <p><strong>Languages</strong><br><span>English, Persian (فارسی), Kurdish</span></p>
+
+                    </aside>
+
+                    <!-- Main biography and highlights -->
+                    <article class="resume-main" aria-labelledby="bio-heading">
+                        <h3 id="bio-heading" class="sr-only">Biography</h3>
+
+                        <section class="bio" dir="auto">
+                            <p>
+                                I am a software engineer focused on building reliable, maintainable systems with .NET and modern web technologies.
+                                My work blends backend architecture, developer tooling, and open source libraries. I enjoy exploring system design,
+                                performance optimization, and developer experience.
+                            </p>
+                        </section>
+
+                        <section class="highlights" aria-label="Key skills and highlights">
+                            <h4>Key skills</h4>
+                            <ul>
+                                <li>.NET / C# · ASP.NET Core · Entity Framework</li>
+                                <li>JavaScript / TypeScript · Modern front-end (React / Vanilla)</li>
+                                <li>APIs, microservices, and serverless (Cloudflare Workers)</li>
+                                <li>Testing, CI/CD, and developer tooling</li>
+                            </ul>
+                        </section>
+
+                        <section class="experience" aria-label="Work experience">
+                            <h4>Selected experience</h4>
+                            <ol>
+                                <li>
+                                    <strong>Halun Company</strong> — Senior .NET Developer
+                                    <div class="meta"><time datetime="2022-01">2022</time> – Present</div>
+                                    <p>Design and implement backend services, improve deployment pipelines, and mentor junior engineers.</p>
+                                </li>
+                                <li>
+                                    <strong>Open Source Projects</strong> — Maintainer / Contributor
+                                    <div class="meta"><time datetime="2020">2020</time> – Present</div>
+                                    <p>Author libraries and tools used by the community; focus on simplicity and performance.</p>
+                                </li>
+                            </ol>
+                        </section>
+
+
+                    </article>
+                </div>
+
+                <footer class="resume-footer" aria-hidden="true" style="margin-top:12px;">
+                    <small>Last updated: <time datetime="2025-11-28">Nov 28, 2025</time></small>
+                </footer>
+            </section>
+
             <!-- Blog -->
             <div class="post-widget" role="region" aria-label="Projects statistics">
 
@@ -124,8 +186,9 @@
                 <template id="post-template">
                     <div class="post-row" tabindex="0" role="article" aria-labelledby="post-title-{{id}}">
                         <div class="post-meta">
-                            <div class="post-id" aria-hidden="true"></div>
+                            <div class="post-username" aria-hidden="true"></div>
                             <div class="post-date" aria-hidden="true"></div>
+                            <div class="post-id" aria-hidden="true"></div>
                         </div>
 
                         <!-- single body container (no split) -->

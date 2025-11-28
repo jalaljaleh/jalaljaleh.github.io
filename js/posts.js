@@ -48,7 +48,7 @@ async function fetchWithFallback(url) {
 
 /* ---------- create node from template (single .post-body) ---------- */
 
-function createRowFromTemplate(post) {
+function createRowFromTemplate(post, username) {
     const tpl = document.getElementById('post-template');
     if (!tpl) throw new Error('#post-template not found');
     const node = tpl.content.firstElementChild.cloneNode(true);
@@ -60,8 +60,11 @@ function createRowFromTemplate(post) {
     // bind meta
     const idEl = node.querySelector('.post-id');
     const dateEl = node.querySelector('.post-date');
+    const usernmaeEl = node.querySelector('.post-username');
+
     if (idEl) idEl.textContent = '#' + (post.id ?? '');
     if (dateEl) dateEl.textContent = formatDate(post.created_at);
+    if (usernmaeEl) usernmaeEl.textContent = ' ' + username;
 
     // single body insertion (preserve line breaks via CSS white-space: pre-wrap)
     const bodyEl = node.querySelector('.post-body');
@@ -276,7 +279,7 @@ export async function renderWeblogPosts(opts = {}) {
 
         // render using template cloning
         json.data.forEach(post => {
-            const node = createRowFromTemplate(post);
+            const node = createRowFromTemplate(post,json.username);
             container.appendChild(node);
         });
 
