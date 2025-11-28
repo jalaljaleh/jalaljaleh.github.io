@@ -271,29 +271,113 @@ body {
 
 
 
-
-
-.post-body {
-    color: #dfdfdf;
-    font-size: 1rem; /* base readable size (adjust as needed) */
-    line-height: 1.8; /* generous leading for easier scanning */
-    max-width: 65ch; /* optimal line length ~45–75 characters */
-    margin: 0 auto; /* center block if container is wide */
-    padding: 0.25rem 0; /* small vertical breathing room */
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-    text-align: right; /* keep RTL if your content is Persian */
-    word-break: break-word; /* avoid overflow on long words/URLs */
-    hyphens: auto; /* allow soft hyphenation where supported */
-    letter-spacing: 0.01em; /* subtle tracking for readability */
-    color-scheme: light dark; /* respects user theme where supported */
+/* ---------------------------
+   Posts widget container
+   --------------------------- */
+.post-widget {
+    padding: clamp(14px, 2vw, 20px);
+    background-color: rgba(0,0,0,0.13);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.03);
 }
 
-    /* Paragraph spacing */
+/* list layout */
+.post-list {
+    display: grid;
+    gap: 12px;
+    padding: 8px;
+}
+
+/* ---------------------------
+   Post card base
+   --------------------------- */
+.post-row {
+    position: relative;
+    background: linear-gradient(180deg, rgba(71,53,255,0.03), transparent);
+    border-radius: 10px;
+    padding: 14px;
+    transition: transform 220ms cubic-bezier(.2,.9,.2,1), box-shadow 220ms, background-color 220ms;
+    will-change: transform, box-shadow;
+    overflow: hidden;
+    outline: none;
+    border: 1px solid rgba(255,255,255,0.02);
+}
+
+    /* hover and keyboard focus lift */
+    .post-row:hover,
+    .post-row:focus-visible {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 40px rgba(2,6,23,0.55), 0 4px 12px rgba(0,0,0,0.35);
+        background-color: rgba(71,53,255,0.06);
+        color: var(--accent);
+    }
+
+    /* soft inner edge */
+    .post-row::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        border-radius: inherit;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+        transition: box-shadow 220ms;
+    }
+
+    .post-row:hover::after,
+    .post-row:focus-visible::after {
+        box-shadow: inset 0 0 40px rgba(71,53,255,0.06);
+    }
+
+    /* active press state */
+    .post-row:active {
+        transform: translateY(-2px);
+    }
+
+/* ---------------------------
+   Meta header
+   --------------------------- */
+.post-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.post-id {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.post-date {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+/* ---------------------------
+   Body typography (single block)
+   --------------------------- */
+.post-body {
+    padding: 0;
+    margin: 0;
+    color: #e6e6e6;
+    font-size: 1rem;
+    line-height: 1.7;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    word-break: break-word;
+    hyphens: auto;
+    letter-spacing: 0.01em;
+    white-space: pre-wrap; /* preserve line breaks */
+    text-align: start; /* will follow document direction */
+}
+
+    /* paragraph spacing inside body */
     .post-body p {
         margin: 0 0 1rem 0;
     }
 
-    /* Improve lists and blockquotes */
+    /* lists and preformatted blocks */
     .post-body ul,
     .post-body ol {
         margin: 0 0 1rem 1.25rem;
@@ -306,7 +390,186 @@ body {
         border-radius: 6px;
         background: rgba(0,0,0,0.03);
         margin: 0 0 1rem 0;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+        font-size: 0.95rem;
     }
+
+/* ---------------------------
+   Bottom actions and CTA (single body)
+   --------------------------- */
+.post-actions-bottom {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.03);
+}
+
+/* small action group */
+.post-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+    /* small action button style */
+    .post-actions .btn-link {
+        padding: 6px 10px;
+        font-size: 13px;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.04);
+        color: var(--text);
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: transform 120ms, background 120ms, box-shadow 120ms;
+        cursor: pointer;
+    }
+
+        .post-actions .btn-link:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(90deg, rgba(87,85,245,0.12), rgba(71,51,183,0.08));
+            box-shadow: 0 6px 14px rgba(71,51,183,0.06);
+        }
+
+/* CTA wrapper and button */
+.post-cta-wrap {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.post-cta {
+    display: inline-block;
+    min-width: 160px;
+    width: 100%;
+    max-width: 320px;
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 12px;
+    color: #fff;
+    background: linear-gradient(90deg, #6f6bff, #4b3bd6);
+    border: none;
+    box-shadow: 0 8px 20px rgba(75,59,200,0.18);
+    cursor: pointer;
+    transition: transform 160ms, box-shadow 160ms, opacity 160ms;
+    text-align: center;
+}
+
+    .post-cta:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(75,59,200,0.22);
+    }
+
+    .post-cta:active {
+        transform: translateY(0);
+    }
+
+.post-row.expanded .post-cta {
+    background: linear-gradient(90deg, #4b3bd6, #6f6bff);
+}
+
+/* ---------------------------
+   Small utilities and states
+   --------------------------- */
+.btn-link:disabled,
+.btn-link[disabled],
+.btn-link.disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+    filter: grayscale(60%);
+    pointer-events: none;
+}
+
+/* focus outline for keyboard users */
+.post-row:focus-visible {
+    outline: 3px solid rgba(87,85,245,0.18);
+    outline-offset: 4px;
+}
+
+/* ---------------------------
+   Responsive adjustments
+   --------------------------- */
+@media (max-width: 720px) {
+    .post-row {
+        padding: 12px;
+        border-radius: 8px;
+    }
+
+    .post-actions-bottom {
+        gap: 8px;
+        padding-top: 10px;
+    }
+
+    .post-cta-wrap {
+        justify-content: stretch;
+    }
+
+    .post-cta {
+        max-width: none;
+        width: 100%;
+    }
+}
+
+/* stack actions on narrow screens */
+@media (max-width: 560px) {
+    .post-actions-bottom {
+        flex-direction: column-reverse;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .post-actions {
+        justify-content: flex-start;
+    }
+}
+
+/* ---------------------------
+   RTL support (automatic)
+   --------------------------- */
+/* Use :dir() so it follows document or element direction */
+:root:dir(rtl) .post-row,
+.post-row:dir(rtl) {
+    direction: rtl;
+}
+
+    :root:dir(rtl) .post-actions-bottom,
+    .post-row:dir(rtl) .post-actions-bottom {
+        direction: rtl;
+    }
+
+    :root:dir(rtl) .post-cta-wrap,
+    .post-row:dir(rtl) .post-cta-wrap {
+        justify-content: flex-start; /* CTA on left for RTL */
+    }
+
+    /* ensure text alignment follows direction */
+    .post-row:dir(rtl) .post-body {
+        text-align: right;
+    }
+
+.post-row:dir(ltr) .post-body {
+    text-align: right;
+}
+
+/* ---------------------------
+   Reduced motion
+   --------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .post-row, .post-row::after, .post-body, .post-actions, .post-cta, .post-actions .btn-link {
+        transition: none !important;
+    }
+}
+
+
+
+
+
+
+
+
+
 
 
 

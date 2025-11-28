@@ -116,18 +116,53 @@
 
         <main class="main" aria-hidden="true">
 
+           
             <!-- Blog -->
-            <div class="projects-widget" role="region" aria-label="Projects statistics">
-                <h2 class="project-label">Last weblog writes - آخرین نوشته ها</h2>
+            <div class="post-widget" role="region" aria-label="Projects statistics">
 
-                <div class="projects-list" id="postslist">
-                   
+                <h2 class="post-label">Last weblog writes - آخرین نوشته ها</h2>
+                <template id="post-template">
+                    <div class="post-row" tabindex="0" role="article" aria-labelledby="post-title-{{id}}">
+                        <div class="post-meta">
+                            <div class="post-id" aria-hidden="true"></div>
+                            <div class="post-date" aria-hidden="true"></div>
+                        </div>
+
+                        <!-- single body container (no split) -->
+                        <div class="post-body" id="post-body-{{id}}" role="region" aria-label="Post content">
+                            <!-- JS will insert textContent or sanitized innerHTML here -->
+                        </div>
+
+                        <!-- bottom actions and CTA -->
+                        <div class="post-actions-bottom">
+                            <div class="post-actions" aria-hidden="true">
+                                <button class="btn-link" data-action="copy" type="button">Copy</button>
+                                <button class="btn-link" data-action="share" type="button">Share</button>
+                            </div>
+
+                            <div class="post-cta-wrap">
+                                <button class="post-cta" data-action="read" type="button">Read More</button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+
+
+                <div class="post-list" id="postslist">
+
+
+
+
+
+
+
                 </div>
 
                 <center>
                     <div class="posts-controls" id="posts-controls" style=" display: flex; align-items: center; margin: 10px 0;  justify-content: space-evenly;">
-                        <button id="btnPrev" style="padding: 10px 30px;"  class="btn-link">◀ Previous</button>
-                        <button id="btnRefresh" style="padding: 10px 30px;"  class="btn-link">⟳ Refresh</button>
+                        <button id="btnPrev" style="padding: 10px 30px;" class="btn-link">◀ Previous</button>
+                        <button id="btnRefresh" style="padding: 10px 30px;" class="btn-link">⟳ Refresh</button>
                         <div id="pageInfo" style="font-size: 13px; color: #af86ff; font-weight: bold; min-width: 100px;">Page 1</div>
                         <button id="btnNext" style="padding: 10px 30px;" class="btn-link">Next ▶</button>
                     </div>
@@ -174,6 +209,6 @@
 
     </div>
 
-    <script src="js/app.js" defer></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
