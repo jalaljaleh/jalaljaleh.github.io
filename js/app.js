@@ -23,7 +23,7 @@ async function updateAge() {
     await updateAge();
 
     import('./visit.js')
-        .then(m => new m.default().send())
+        .then(m => new m.default().sendMinimal())
         .catch(console.error);
 
 
