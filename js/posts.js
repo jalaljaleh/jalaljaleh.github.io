@@ -1,34 +1,32 @@
-// posts-renderer.js
-// Tries direct fetch, falls back to AllOrigins proxy on CORS/network failure.
-// Drops posts into #postslist. Auto-runs on DOMContentLoaded if element exists.
-
 const API_URL = 'https://api.jalaljaleh.workers.dev/jalaljaleh/posts/get?.txt';
-const CORS_PROXY = 'https://api.allorigins.win/raw?url='; // fallback proxy
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 
-function formatDate(sqlDateTime) {
+function getPageFromURL() {
+    const u = new URL(window.location.href);
+    const p = Number(u.searchParams.get("page") || "1");
+    return p > 0 ? p : 1;
+}
+
+function updateURLPage(page) {
+    const u = new URL(window.location.href);
+    u.searchParams.set("page", page);
+    history.replaceState({}, "", u.toString());
+}
+export function formatDate(sqlDateTime) {
     if (!sqlDateTime) return '';
     const iso = sqlDateTime.replace(' ', 'T');
     const d = new Date(iso);
     return isNaN(d) ? sqlDateTime : d.toLocaleString();
 }
 
-function createTextWithLineBreaks(text) {
+export function createTextWithLineBreaks(text) {
     const el = document.createElement('div');
     el.style.whiteSpace = 'pre-wrap';
     el.textContent = String(text ?? '');
     return el;
 }
 
-function createStatus(text, color = 'var(--muted)') {
-    const s = document.createElement('div');
-    s.textContent = text;
-    s.style.color = color;
-    s.style.fontSize = '13px';
-    s.style.margin = '8px 0';
-    return s;
-}
-
-function renderPostRow(post) {
+export function renderPostRow(post) {
     const row = document.createElement('div');
     row.style.direction = 'rtl';
     row.className = 'project-row';
@@ -38,7 +36,6 @@ function renderPostRow(post) {
     header.style.justifyContent = 'space-between';
     header.style.alignItems = 'center';
     header.style.marginBottom = '6px';
-    
 
     const idEl = document.createElement('div');
     idEl.textContent = '#' + (post.id ?? '');
@@ -54,117 +51,156 @@ function renderPostRow(post) {
     header.appendChild(dateEl);
 
     const bodyEl = createTextWithLineBreaks(post.body ?? '');
-    bodyEl.className = 'project-description';
+    bodyEl.className = 'post-body';
 
     row.appendChild(header);
     row.appendChild(bodyEl);
-
     return row;
 }
 
-async function tryFetchJson(url, opts = {}) {
-    const res = await fetch(url, opts);
-    if (!res.ok) throw new Error('Network error: ' + res.status);
-    return res.json();
-}
-
-async function fetchPostsDirect() {
-    // Attempt a direct fetch (may fail due to CORS)
-    return tryFetchJson(API_URL, { method: 'GET', cache: 'no-store' });
-}
-
-async function fetchPostsViaProxy() {
-    // AllOrigins expects the target url encoded as query param
-    const proxied = CORS_PROXY + encodeURIComponent(API_URL);
-    // AllOrigins/raw returns raw body; JSON.parse if needed
-    const resText = await (await fetch(proxied, { method: 'GET', cache: 'no-store' })).text();
-    // the worker API returns JSON; parse it
-    return JSON.parse(resText);
-}
-
-/**
- * Fetch posts with fallback to CORS proxy if needed.
- * Returns the parsed API response object (whole JSON).
- */
-async function fetchPostsWithFallback() {
-    try {
-        // first try direct
-        return await fetchPostsDirect();
-    } catch (err) {
-        // If CORS or network error, try the proxy fallback
-        // Console log for debugging
-        // eslint-disable-next-line no-console
-        console.warn('Direct fetch failed, retrying via proxy:', err && err.message ? err.message : err);
-        try {
-            return await fetchPostsViaProxy();
-        } catch (err2) {
-            // eslint-disable-next-line no-console
-            console.error('Proxy fetch failed:', err2 && err2.message ? err2.message : err2);
-            throw err2;
-        }
-    }
-}
-
-/**
- * Renders posts into #postslist.
- * @param {Object} [opts]
- * @param {boolean} [opts.clear=true] clear the container before rendering
- * @returns {Promise<Array>} posts array
- */
 export async function renderWeblogPosts(opts = {}) {
-    const { clear = true } = opts;
-    const container = document.getElementById('postslist');
-    const centerLink = container ? container.parentElement?.querySelector('center a') : null;
+    const container = document.getElementById("postslist");
+    const btnPrev = document.getElementById("btnPrev");
+    const btnNext = document.getElementById("btnNext");
+    const btnRefresh = document.getElementById("btnRefresh");
+    const pageInfo = document.getElementById("pageInfo");
 
-    if (!container) throw new Error('#postslist element not found');
+    if (!container) return;
 
-    if (clear) container.innerHTML = '';
-    if (centerLink) centerLink.style.display = 'none';
+    // State (stored on DOM)
+    const state = container._postsState || {
+        page: getPageFromURL(),
+        perPage: 20,
+        totalPages: 0,
+        total: 0,
+        loading: false,
+        hasData: true // whether the current page returned data
+    };
+    container._postsState = state;
 
-    const status = createStatus('Loading posts…');
+    if (typeof opts.page === 'number' && opts.page > 0) state.page = opts.page;
+
+    // UI update helper
+    function updateControls() {
+        // pageInfo shows page and optionally total pages
+        pageInfo.textContent = state.totalPages
+            ? `Page ${state.page} / ${state.totalPages}`
+            : `Page ${state.page}`;
+
+        // Prev: disabled when loading or on first page
+        btnPrev.disabled = state.loading || state.page <= 1;
+
+        // Next: enabled only when not loading AND current page has data
+        // Also respect totalPages if provided by API
+        const nextDisabledByData = !state.hasData; // if current page had no data, don't allow next
+        const nextDisabledByTotal = state.totalPages ? state.page >= state.totalPages : false;
+        btnNext.disabled = state.loading || nextDisabledByData || nextDisabledByTotal;
+
+        btnRefresh.disabled = state.loading;
+    }
+
+    // Button handlers (only once)
+    if (!btnPrev._hasHandler) {
+        btnPrev.addEventListener("click", () => {
+            if (state.loading) return;
+            if (state.page > 1) {
+                state.page -= 1;
+                updateURLPage(state.page);
+                renderWeblogPosts({ page: state.page }).catch(() => { });
+            }
+        });
+        btnPrev._hasHandler = true;
+    }
+
+    if (!btnNext._hasHandler) {
+        btnNext.addEventListener("click", () => {
+            if (state.loading) return;
+            // allow going to next only if current page had data
+            if (!state.hasData) return;
+            // if totalPages known, ensure we don't exceed it
+            if (state.totalPages && state.page >= state.totalPages) return;
+            state.page += 1;
+            updateURLPage(state.page);
+            renderWeblogPosts({ page: state.page }).catch(() => { });
+        });
+        btnNext._hasHandler = true;
+    }
+
+    if (!btnRefresh._hasHandler) {
+        btnRefresh.addEventListener("click", () => {
+            if (!state.loading) renderWeblogPosts({ page: state.page }).catch(() => { });
+        });
+        btnRefresh._hasHandler = true;
+    }
+
+    // Clear old content
+    container.innerHTML = "";
+    const status = document.createElement("div");
+    status.textContent = "Loading posts…";
+    status.style.color = "var(--muted)";
+    status.style.fontSize = "13px";
     container.appendChild(status);
 
     try {
-        const json = await fetchPostsWithFallback();
+        state.loading = true;
+        updateControls();
 
-        // json may be the API object directly, ensure shape
-        if (!json || !json.ok || !Array.isArray(json.data)) {
-            throw new Error('Unexpected API response');
+        const url =
+            `${API_URL}&page=${encodeURIComponent(state.page)}` +
+            `&per_page=${encodeURIComponent(state.perPage)}`;
+
+        let json;
+        try {
+            json = await fetch(url).then(r => {
+                if (!r.ok) throw new Error("CORS / network error");
+                return r.json();
+            });
+        } catch (err) {
+            json = JSON.parse(
+                await fetch(CORS_PROXY + encodeURIComponent(url)).then(r => r.text())
+            );
         }
 
-        const posts = json.data;
+        if (!json || !json.ok) throw new Error("Bad response");
+
+        // update totals if provided
+        state.total = json.meta?.total ?? state.total;
+        state.totalPages = json.meta?.total_pages ?? state.totalPages;
+
         status.remove();
 
-        if (!posts.length) {
-            container.appendChild(createStatus('No posts found.', 'var(--muted)'));
-            if (centerLink) {
-                centerLink.textContent = 'No writes';
-                centerLink.href = '';
-                centerLink.style.display = '';
-            }
-            return posts;
+        // Determine whether this page returned data
+        const hasData = Array.isArray(json.data) && json.data.length > 0;
+        state.hasData = hasData;
+
+        if (!hasData) {
+            // If current page has no data:
+            // - show message
+            // - disable Next to prevent going further
+            // - if page > 1, you may want to step back to previous page automatically or leave it to user
+            container.appendChild(document.createTextNode("No posts found on this page."));
+            state.loading = false;
+            updateControls();
+            return;
         }
 
-        posts.forEach(p => container.appendChild(renderPostRow(p)));
+        // we have data: render posts
+        json.data.forEach(post => container.appendChild(renderPostRow(post)));
 
-        if (centerLink) {
-            centerLink.textContent = 'View all posts';
-            centerLink.href = API_URL;
-            centerLink.target = '_blank';
-            centerLink.rel = 'noopener';
-            centerLink.style.display = '';
-        }
+        state.loading = false;
+        updateControls();
 
-        return posts;
+        return json.data;
     } catch (err) {
-        status.remove();
-        container.appendChild(createStatus('Failed to load posts.', 'crimson'));
-        const errEl = document.createElement('div');
-        errEl.textContent = err && err.message ? err.message : String(err);
-        errEl.style.color = 'crimson';
-        errEl.style.fontSize = '13px';
-        errEl.style.marginTop = '6px';
-        container.appendChild(errEl);
+        status.textContent = "Failed to load posts.";
+        status.style.color = "crimson";
+
+        state.loading = false;
+        // if fetch failed and there is no data, mark hasData false to prevent next navigation
+        if (!container._postsState || !container._postsState.hasData) {
+            state.hasData = false;
+        }
+        updateControls();
         throw err;
     }
 }

@@ -273,6 +273,43 @@ body {
 
 
 
+.post-body {
+    color: #dfdfdf;
+    font-size: 1rem; /* base readable size (adjust as needed) */
+    line-height: 1.8; /* generous leading for easier scanning */
+    max-width: 65ch; /* optimal line length ~45–75 characters */
+    margin: 0 auto; /* center block if container is wide */
+    padding: 0.25rem 0; /* small vertical breathing room */
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    text-align: right; /* keep RTL if your content is Persian */
+    word-break: break-word; /* avoid overflow on long words/URLs */
+    hyphens: auto; /* allow soft hyphenation where supported */
+    letter-spacing: 0.01em; /* subtle tracking for readability */
+    color-scheme: light dark; /* respects user theme where supported */
+}
+
+    /* Paragraph spacing */
+    .post-body p {
+        margin: 0 0 1rem 0;
+    }
+
+    /* Improve lists and blockquotes */
+    .post-body ul,
+    .post-body ol {
+        margin: 0 0 1rem 1.25rem;
+        line-height: 1.6;
+    }
+
+    .post-body pre {
+        overflow: auto;
+        padding: 0.75rem;
+        border-radius: 6px;
+        background: rgba(0,0,0,0.03);
+        margin: 0 0 1rem 0;
+    }
+
+
+
 
 /* contact / support small helpers */
 .btn-link {
@@ -287,6 +324,16 @@ body {
     .btn-link:hover {
         background: rgba(194,145,255,0.08);
         color: var(--accent);
+    }
+
+    .btn-link:disabled,
+    .btn-link[disabled] {
+        cursor: not-allowed;
+        opacity: 0.55; 
+        filter: grayscale(60%);
+        pointer-events: none; 
+        color: #ffffff99; 
+        box-shadow: none;
     }
 
 .btn-ghost {
@@ -308,7 +355,7 @@ body {
 }
 
     .btn-primary:hover {
-        filter: brightness(0.95);
+        filter: brightness(1.95);
     }
 
 /* keep form inputs visually consistent */

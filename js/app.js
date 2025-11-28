@@ -37,8 +37,12 @@ async function updateAge() {
         .catch(console.error);
 
     import('./posts.js')
-        .then(mod => mod.renderWeblogPosts())
+        .then(mod => {
+            const page = new URL(location.href).searchParams.get("page");
+            mod.renderWeblogPosts({ page: Number(page) || 1 });
+        })
         .catch(console.error);
+
 
 })();
 
