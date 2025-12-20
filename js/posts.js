@@ -3,7 +3,7 @@
 // Ensures Read More CTA toggles the same body block (collapsed/expanded),
 // and Copy/Share buttons operate on the single .post-body text.
 
-const API_URL = 'https://api.jalaljaleh.workers.dev/jalaljaleh/posts/get?.txt';
+const API_URL = 'https://dreams.jalaljaleh.workers.dev/jalaljaleh/posts/get?.txt';
 const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 
 function getPageFromURL() {
