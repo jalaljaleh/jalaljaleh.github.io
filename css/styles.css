@@ -286,10 +286,11 @@ body {
 
 
     /* projects */
-    .projects-widget {
-        padding: clamp(14px, 2vw, 20px);
-        background-color: #00000021;
-    }
+.projects-widget {
+    margin-top: 10px;
+    padding: clamp(14px, 2vw, 20px);
+    background-color: #00000021;
+}
 
     .projects-list {
         display: grid;
@@ -335,12 +336,12 @@ body {
     /* ---------------------------
    Posts widget container
    --------------------------- */
-    .post-widget {
-        padding: clamp(14px, 2vw, 20px);
-        background-color: rgba(0,0,0,0.13);
-        border-radius: 12px;
-        border: 1px solid rgba(255,255,255,0.03);
-    }
+.post-widget {
+    padding: clamp(14px, 2vw, 20px);
+    background-color: rgb(14 16 19);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.03);
+}
 
     /* list layout */
     .post-list {
